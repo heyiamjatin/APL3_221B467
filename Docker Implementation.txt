@@ -1,0 +1,300 @@
+1: docker --version
+
+Description: This command checks the installed version of Docker on your machine. The output indicates that you have Docker version 28.0.1.
+
+C:\Windows\System32>docker --version
+Docker version 28.0.1, build 068a01e
+
+
+2: docker pull hello-world
+
+Description: This command pulls the hello-world image from Docker Hub, which is a simple image used to verify Docker installation. The output shows that Docker successfully downloaded the hello-world image.
+
+C:\Windows\System32>docker pull hello-world
+Using default tag: latest
+latest: Pulling from library/hello-world
+Digest: sha256:fc08e727181e2668370f47db6319815c279ed887e2f01be96b94106bc2781430 Status: Downloaded newer image for hello-world:latest
+docker.io/library/hello-world:latest
+
+
+3: docker run hello-world
+
+Description: This command runs the hello-world image as a container. It prints a message confirming that Docker is properly installed and working, as it was able to run the container and output this message.
+
+docker run -it ubuntu
+
+Description: This command starts an interactive (-it) Ubuntu container, allowing you to interact with the container's shell. After entering the container, you are placed at the root prompt (root@279776ee691a:/#).
+
+
+
+
+
+
+
+
+docker run -d -p 8081:8081 --name mongo-express --network mongo-network -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=admin -e ME_CONFIG_MONGODB_URL="mongodb://admin:admin@mongo:27017" mongo-express
+
+Description: This command runs the mongo-express container in detached mode (-d), binding port 8081 to the host. It connects this container to the mongo-network, setting environment variables for the MongoDB admin username, password, and URL so it can connect to the previously running MongoDB container. It pulls the mongo-express image from Docker Hub as it wasn't available locally.
+
+docker network inspect mongo-network
+
+Description: This command is run again to verify the updated network configuration, confirming that both the mongo and mongo-express containers are connected to the mongo-network. It shows both containers’ IP addresses on the network.
+C:\Windows\System32>docker run hello-world
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+To generate this message, Docker took the following steps:
+1. The Docker client contacted the Docker daemon.
+2. The Docker daemon pulled the "hello-world" image from the Docker Hub. (amd64)
+3. The Docker daemon created a new container from that image which runs the executable that produces the output you are currently reading.
+4. The Docker daemon streamed that output to the Docker client, which sent it to your terminal.
+To try something more ambitious, you can run an Ubuntu container with:  $ docker run -it ubuntu bash
+
+
+4: docker run -it ubuntu
+
+Description: This command starts an interactive (-it) Ubuntu container, allowing you to interact with the container's shell. After entering the container, you are placed at the root prompt (root@279776ee691a:/#).
+
+C:\Windows\System32>docker run -it ubuntu
+root@279776ee691a:/# 1s
+bin boot dev etc home lib lib64 media mnt opt proc root run sbin srv sys tmp root@279776ee691a:/# mkdir juet
+root@279776ee691a:/# 1s
+usr var
+bin boot dev etc home juet lib lib64 media mnt opt proc root run sbin srv sys tmp usr root@279776ee691a:/# cd juet
+root@279776ee691a:/juet# touch student.js
+root@279776ee691a:/juet# ls
+student.js
+root@279776ee691a:/juet# cd
+root@279776ee691a:~# exit
+exit
+
+
+docker network ls
+
+Description: This command lists all the Docker networks on your system. The output shows several networks, including the default bridge and host networks, along with a custom network mongo-network that was created earlier.
+
+
+C:\Windows\System32>docker network Is
+NETWORK ID
+9f28e9fe007c
+4fdbd89e0312
+NAME bridge host
+DRIVER
+SCOPE bridge local
+host
+local
+cba736f81952
+mongo-network
+bridge local
+aa1d328b5aa8
+none
+null
+local
+var
+
+
+docker network create mongo-network
+
+Description: This command attempts to create a new network called mongo-network. However, it fails with the message that the network already exists, as shown in the output.
+
+
+C:\Windows\System32>docker network create mongo-network
+Error response from daemon: network with name mongo-network already exists
+C:\Windows\System32>docker run -d -p 27017:27017 --name mongo --network mongo-network -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin mongo Unable to find image 'mongo:latest' locally
+latest: Pulling from library/mongo
+90ade5227b11: Pull complete
+29fee425acle: Pull complete
+8fc21ef9255d: Pull complete
+66eecf3d03b3: Pull complete 7e4d144a0672: Pull complete adf7a2b7606d: Pull complete
+1a08ed22982f: Pull complete
+Digest: sha256:688d9e755d2b6093cf00ac553dd37ece1562400558515c977f57b3cc8df4eeb6
+Status: Downloaded newer image for mongo:latest
+
+
+
+C:\Windows\System32>docker network inspect mongo-network
+[
+{
+"Name": "mongo-network",
+"Id": "cba736f81952ba32fdb1d8262f2ef5d4eed9ec9f55c9b8d98ff8b59b58edab36", "Created": "2025-04-09T10:14:49.682671111Z",
+"Scope": "local",
+"Driver": "bridge",
+"EnableIPv4": true,
+"EnableIPv6": false,
+"IPAM": {
+"Driver": "default",
+"Options": {},
+"Config":[
+{
+}
+]
+},
+"Subnet": "172.18.0.0/16", "Gateway": "172.18.0.1"
+"Internal": false,
+"Attachable": false,
+"Ingress": false,
+"ConfigFrom": {
+},
+"Network": ""
+"ConfigOnly": false,
+"Containers": {
+"f138e4847153ead5fb591dd59e1dd7a505a2ef7628fca9a9836988528e1ad4c8": {
+}
+},
+"Name": "mongo",
+"EndpointID": "940cd5482ace1c3ee6157befee13c733ebc737d6784709233a37b48de286cf5b",
+"MacAddress": "ba:6e:99:3c:b6:24",
+"IPv4Address": "172.18.0.2/16",
+"IPv6Address": ""
+"Options": {},
+"Labels": {}
+}
+]
+
+docker run -d -p 27017:27017 --name mongo --network mongo-network -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin mongo
+
+Description: This command runs a MongoDB container (mongo) in detached mode (-d), exposing port 27017 on the host machine. It also connects the container to the previously created mongo-network and sets initial MongoDB root username and password. The image is pulled from Docker Hub because it wasn't found locally.
+
+
+
+
+C:\Windows\System32>docker run -d -p 8081:8081 --name mongo-express --network mongo-network -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=admin -e ME_CONFIG_MONGODB_UR L="mongodb://admin: admin @mongo:27017" mongo-express
+L="mongodb://admin: admin @mongo:27017" mongo-express Unable to find image 'mongo-express:latest' locally
+latest: Pulling from library/mongo-express
+Obf3571b6cd7: Pull complete 88f4f8a6bc8d: Pull complete d8305ae32c95: Pull complete 7e9a007eb24b: Pull complete 45b24ec126f9: Pull complete 9f7f59574f7d: Pull complete 619be1103602: Pull complete
+5189255e31c8: Pull complete
+I
+Digest: sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64 Status: Downloaded newer image for mongo-express:latest 88331f7ffecdd56a4148643eebe47a082ddd5ad7f1a2a9111373721a512e5b87
+
+
+docker network inspect mongo-network
+
+Description: This command inspects the details of the mongo-network Docker network. The output provides information like the network's ID, driver (bridge), subnet, gateway, and the containers connected to the network (in this case, the MongoDB container).
+
+
+
+C:\Windows\System32>docker network inspect mongo-network
+[
+{
+"Name": "mongo-network",
+"Id": "cba736f81952ba32fdb1d8262f2ef5d4eed9ec9f55c9b8d98ff8b59b58edab36", "Created": "2025-04-09T10:14:49.682671111Z",
+"Scope": "local",
+"Driver": "bridge",
+"EnableIPv4": true,
+"EnableIPv6": false,
+"IPAM": {
+"Driver": "default",
+"Options": {},
+"Config":[
+{
+}
+]
+}
+"Subnet": "172.18.0.0/16", "Gateway": "172.18.0.1"
+"Internal": false,
+"Attachable": false,
+"Ingress": false,
+"ConfigFrom": {
+},
+"Network": ""
+"ConfigOnly": false,
+"Containers": {
+"f138e4847153ead5fb591dd59e1dd7a505a2ef7628fca9a9836988528e1ad4c8": {
+"Name": "mongo",
+"EndpointID": "940cd5482ace1c3ee6157befee13c733ebc737d6784709233a37b48de286cf5b",
+"MacAddress": "ba:6e:99:3c:b6:24",
+"IPv4Address": "172.18.0.2/16", "IPv6Address": ""
+"Options": {},
+}
+},
+"Labels": {}
+}
+]
+
+
+
+C:\Windows\System32>docker network inspect mongo-network
+[
+{
+"Name": "mongo-network",
+"Id": "cba736f81952ba32fdb1d8262f2ef5d4eed9ec9f55c9b8d98ff8b59b58eab36", "Created": "2025-04-09T10:14:49.682671111Z",
+"Scope": "local",
+"Driver": "bridge",
+"EnableIPv4": true,
+"EnableIPv6": false,
+"IPAM": {
+"Driver": "default",
+"Options": {},
+"Config":[
+{
+}
+]
+}
+"Subnet": "172.18.0.0/16", "Gateway": "172.18.0.1"
+"Internal": false,
+"Attachable": false,
+"Ingress": false,
+"ConfigFrom": {
+},
+"Network": ""
+"ConfigOnly": false,
+"Containers": {
+"f138e4847153ead5fb591dd59e1dd7a505a2ef7628fca9a9836988528e1ad4c8": {
+"Name": "mongo",
+"EndpointID": "940cd5482ace1c3ee6157befee13c733ebc737d6784709233a37b48de286cf5b",
+"MacAddress": "ba:6e:99:3c:b6:24",
+"IPv4Address": "172.18.0.2/16",
+"IPv6Address": ""
+"Options": {},
+"Labels": {}
+]
+
+
+
+C:\Windows\System32>docker run -d -p 8081:8081 --name mongo-express --network mongo-network -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=admin -e ME_CONFIG_MONGODB_UR L="mongodb://admin: admin@mongo:27017" mongo-express
+4602cb192e266b127a147b294769409b094536b9aa54cbb580c9f69854749ed3
+
+C:\Windows\System32>docker network inspect mongo-network
+[
+{
+"Name": "mongo-network",
+"Id": "cba736f81952ba32fdb1d8262f2ef5d4eed9ec9f55c9b8d98ff8b59b58edab36", "Created": "2025-04-09T10:14:49.682671111Z",
+"Scope": "local",
+"Driver": "bridge",
+"EnableIPv4": true,
+"EnableIPv6": false,
+"IPAM": {
+"Driver": "default",
+"Options": {},
+"Config":[
+{
+"Subnet": "172.18.0.0/16", "Gateway": "172.18.0.1"
+]
+},
+"Internal": false,
+"Attachable": false,
+"Ingress": false,
+"ConfigFrom": {
+},
+"Network": ""
+"ConfigOnly": false,
+"Containers": {
+"4602cb192e266b127a147b294769409b094536b9aa54cbb580c9f69854749ed3": {
+},
+"Name": "mongo-express",
+"EndpointID": "45fc153fc5e148dd1b3fb1860cf57dace494b18af91ba62fc74154c45c61ec19", "MacAddress": "7a:f7:ad: 45:e5:42",
+"IPv4Address": "172.18.0.3/16", 
+"IPv6Address": ""
+"469d026e4a77616d53b72c53c0263b4650d90b0e01d454e33240217901bdcdb2": {
+"Name": "mongo",
+"EndpointID": "71a4dbc5587a8d969f62a99b0db80c069d4d84ab0a178d13885108ecc49357cb", "MacAddress": "96:54:31:83:79:2e",
+"IPv4Address": "172.18.0.2/16",
+"IPv6Address": ""
+}
+},
+"Options": {},
+"Labels": {}
+}
+]
+
+
+
